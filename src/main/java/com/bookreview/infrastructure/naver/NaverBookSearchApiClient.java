@@ -3,14 +3,12 @@ package com.bookreview.infrastructure.naver;
 import com.bookreview.domain.book.BookSearchApiClient;
 import com.bookreview.domain.book.dto.BookSearchResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
 @Slf4j
-@Component
 public class NaverBookSearchApiClient implements BookSearchApiClient {
 
     private static final String NAVER_BOOK_SEARCH_URL =
@@ -20,9 +18,9 @@ public class NaverBookSearchApiClient implements BookSearchApiClient {
     private final RestClient restClient;
     private final NaverBookProperties properties;
 
-    public NaverBookSearchApiClient(NaverBookProperties properties) {
+    public NaverBookSearchApiClient(RestClient restClient, NaverBookProperties properties) {
+        this.restClient = restClient;
         this.properties = properties;
-        this.restClient = RestClient.create();
     }
 
     @Override
@@ -34,6 +32,10 @@ public class NaverBookSearchApiClient implements BookSearchApiClient {
                 .retrieve()
                 .body(NaverBookSearchResponse.class);
 
+        return mapResponse(response);
+    }
+
+    List<BookSearchResult> mapResponse(NaverBookSearchResponse response) {
         if (response == null || response.getItems() == null) {
             return List.of();
         }
