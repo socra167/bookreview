@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head th:replace="~{fragments/layout :: head('로그인')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: nav}"></nav>
+
+<div class="main">
+    <div class="login-wrapper">
+        <div class="login-box">
+            <h2>📚 책리뷰</h2>
+            <p class="subtitle">이메일을 입력하면 자동으로 가입됩니다</p>
+
+            <form th:action="@{/login}" method="post">
+                <input type="hidden" name="redirectUrl" th:value="${redirectUrl}">
+
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input id="email" class="input-full" type="email" name="email"
+                           placeholder="hello@example.com" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="nickname">닉네임</label>
+                    <input id="nickname" class="input-full" type="text" name="nickname"
+                           placeholder="책을 좋아하는 독자" required>
+                    <p class="input-hint">이미 가입된 이메일은 기존 닉네임이 유지됩니다.</p>
+                </div>
+
+                <button type="submit" class="btn-primary btn-block" style="margin-top:8px">
+                    시작하기
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

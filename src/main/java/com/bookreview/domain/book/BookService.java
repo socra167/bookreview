@@ -59,6 +59,12 @@ public class BookService {
                 .forEach(bookRepository::save);
     }
 
+    @Transactional(readOnly = true)
+    public Book getBookByIsbn(String isbn) {
+        return bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다. isbn=" + isbn));
+    }
+
     private BookSearchResult toSearchResult(Book book) {
         return BookSearchResult.builder()
                 .isbn(book.getIsbn())

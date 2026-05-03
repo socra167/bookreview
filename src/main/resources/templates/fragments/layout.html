@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<!-- head fragment -->
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' | 책리뷰'">책리뷰</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<!-- nav fragment -->
+<nav th:fragment="nav" class="navbar">
+    <div class="container">
+        <a class="nav-brand" th:href="@{/}">📚 책리뷰</a>
+        <form class="nav-search" th:action="@{/}" method="get">
+            <input type="text" name="query" placeholder="책 제목 또는 저자 검색…">
+            <button type="submit">검색</button>
+        </form>
+        <div class="nav-user">
+            <th:block th:if="${session.loginMember != null}">
+                <span class="nickname" th:text="${session.loginMember.nickname()}">사용자</span>
+                <form th:action="@{/logout}" method="post" style="display:inline">
+                    <button type="submit" class="btn-link">로그아웃</button>
+                </form>
+            </th:block>
+            <th:block th:unless="${session.loginMember != null}">
+                <a th:href="@{/login}">로그인</a>
+            </th:block>
+        </div>
+    </div>
+</nav>
+
+</html>

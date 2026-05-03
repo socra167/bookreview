@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head th:replace="~{fragments/layout :: head('책 검색')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: nav}"></nav>
+
+<div class="main">
+    <div class="container">
+
+        <!-- Hero 검색 영역 -->
+        <div class="hero">
+            <h1>📖 어떤 책을 찾고 계신가요?</h1>
+            <p>책 제목이나 저자 이름으로 검색해 보세요</p>
+            <form class="hero-search" th:action="@{/}" method="get">
+                <input type="text" name="query" placeholder="예: 클린 코드, 로버트 마틴…"
+                       th:value="${query}" autofocus>
+                <button type="submit">검색</button>
+            </form>
+        </div>
+
+        <!-- 검색 결과 -->
+        <th:block th:if="${results != null}">
+            <p class="section-title"
+               th:text="'&quot;' + ${query} + '&quot; 검색 결과 ' + ${results.size()} + '권'">검색 결과</p>
+
+            <div th:if="${results.isEmpty()}" class="empty-state">
+                <span class="icon">🔍</span>
+                <p>검색 결과가 없습니다. 다른 검색어를 입력해 보세요.</p>
+            </div>
+
+            <div th:unless="${results.isEmpty()}" class="book-grid">
+                <a th:each="book : ${results}"
+                   th:href="@{/books/{isbn}(isbn=${book.isbn})}"
+                   class="book-card">
+                    <img th:if="${book.thumbnail != null and !book.thumbnail.isBlank()}"
+                         th:src="${book.thumbnail}" th:alt="${book.title}" class="book-card-img">
+                    <div th:unless="${book.thumbnail != null and !book.thumbnail.isBlank()}"
+                         class="book-card-img" style="display:flex;align-items:center;justify-content:center;font-size:2.5rem;">📘</div>
+                    <div class="book-card-body">
+                        <p class="book-card-title" th:text="${book.title}">제목</p>
+                        <p class="book-card-author" th:text="${book.author}">저자</p>
+                    </div>
+                </a>
+            </div>
+        </th:block>
+
+        <!-- 초기 상태 -->
+        <th:block th:unless="${results != null}">
+            <div class="empty-state">
+                <span class="icon">📚</span>
+                <p>위 검색창에 책 제목이나 저자를 입력하면 결과가 표시됩니다.</p>
+            </div>
+        </th:block>
+
+    </div>
+</div>
+
+</body>
+</html>
